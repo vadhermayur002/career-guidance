@@ -38,11 +38,12 @@ function Admin() {
               <Typography variant="body2" color="text.secondary">
                 View, edit or remove users
               </Typography>
-              <Button
+
+               <Button onClick={() => navigate("/usersmg")}
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: "#1a237e" }}
               >
-                Go
+                Manage Users 
               </Button>
             </Paper>
           </Grid>
@@ -58,7 +59,7 @@ function Admin() {
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: "#1a237e" }}
               >
-                Go
+                Manage Courses 
               </Button>
             </Paper>
           </Grid>
@@ -73,7 +74,9 @@ function Admin() {
                <Button onClick={() => navigate("/collegesmg")}
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: "#1a237e" }}
-              >Go</Button>
+              >
+                Manage Colleges
+              </Button>
             </Paper>
           </Grid>
          
@@ -90,7 +93,9 @@ function Admin() {
                <Button onClick={() => navigate("/Exammg")}
                 variant="contained"
                 sx={{ mt: 2, backgroundColor: "#1a237e" }}
-              >Go</Button>
+              >
+                Manage Exams 
+              </Button>
             </Paper>
           </Grid>
          </Grid>

@@ -68,7 +68,7 @@ function Home() {
               }}
               onClick={handleLogout}
             >
-              Loin
+              Login 
             </Button>
           ) : (
             <Button

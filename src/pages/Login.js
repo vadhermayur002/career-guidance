@@ -12,16 +12,6 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // 🔹 Hardcoded admin login
-    if (email === "admin@gmail.com" && password === "admin123") {
-      localStorage.setItem("isLoggedIn", true);
-      localStorage.setItem("role", "admin");
-      localStorage.setItem("token", "admin-token"); // optional
-      navigate("/admin");
-      return;
-    }
-
-    // 🔹 Backend login for normal users
     try {
       const res = await axios.post("http://localhost:5000/api/login", {
         email,
@@ -30,7 +20,7 @@ function Login() {
 
       const data = res.data;
 
-      // Save token and role
+      // Save token and role in localStorage
       localStorage.setItem("token", data.token || "user-token");
       localStorage.setItem("role", data.role);
       localStorage.setItem("isLoggedIn", true);

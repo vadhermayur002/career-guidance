@@ -23,7 +23,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import SchoolIcon from "@mui/icons-material/School";   // For Colleges
 import QuizIcon from "@mui/icons-material/Quiz";       // For Tests
 
-function MainMenu() {
+function Mainmenu() {
   const navigate = useNavigate();
 
   const handleProtectedNavigation = (path) => {
@@ -37,17 +37,18 @@ function MainMenu() {
 
   const menuItems = [
     { title: "Home", desc: "Welcome to Career Guidance", icon: <HomeIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/menu" },
-    { title: "About", desc: "Our mission & vision", icon: <InfoIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/about" },
-    { title: "Career Paths", desc: "Find your career journey", icon: <WorkIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/career-paths" },
-    { title: "Colleges", desc: "Top institutes & universities", icon: <SchoolIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/colleges" },
+   { title: "Colleges", desc: "Top institutes & universities", icon: <SchoolIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/colleges" },
     { title: "Courses", desc: "Explore trending courses", icon: <BookIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/courses" },
-    { title: "Exams", desc: "Competitive & skill exams", icon: <AssignmentIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/exams" },
+    { title: "Exams", desc: "Competitive exams", icon: <AssignmentIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/exams" },
     { title: "Tests", desc: "Practice & mock tests", icon: <QuizIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/test" },
     { title: "Tools", desc: "Self-assessment & resume", icon: <BuildIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/tools" },
     { title: "Blog", desc: "Career advice & trends", icon: <ArticleIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/blog" },
     { title: "Resources", desc: "E-books & videos", icon: <FolderIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/resources" },
+     { title: "About", desc: "Our mission & vision", icon: <InfoIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/about" },
+    { title: "Career Paths", desc: "Find your career journey", icon: <WorkIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/career-paths" },
     { title: "Contact", desc: "Reach out to us", icon: <ContactMailIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/contact" },
     { title: "Logout", desc: "Logout", icon: <LoginIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/login" },
+    
   ];
 
   return (
@@ -144,4 +145,4 @@ function MainMenu() {
   );
 }
 
-export default MainMenu;
+export default Mainmenu;

@@ -18,6 +18,7 @@ import Admin from "./Admin page/Admin";
 import Collegesmg from "./Admin page/Collegesmg";
 import Coursesmg from "./Admin page/Coursesmg";
 import Exammg from "./Admin page/Exammg";
+import Usersmg from "./Admin page/Usersmg";
 
 // Test Pages
 import UPSCTest from "./Test/UPSCTest";
@@ -120,6 +121,11 @@ function App() {
           />
 
           {/* Admin Routes */}
+
+           <Route
+            path="/usersmg"
+            element={<PrivateRoute element={<Usersmg />} allowedRole="admin" />}
+          />
           <Route
             path="/admin"
             element={<PrivateRoute element={<Admin />} allowedRole="admin" />}
