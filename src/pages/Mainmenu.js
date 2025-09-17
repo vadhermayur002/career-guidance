@@ -45,7 +45,7 @@ function Mainmenu() {
     { title: "Blog", desc: "Career advice & trends", icon: <ArticleIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/blog" },
     { title: "Resources", desc: "E-books & videos", icon: <FolderIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/resources" },
      { title: "About", desc: "Our mission & vision", icon: <InfoIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/about" },
-    { title: "Career Paths", desc: "Find your career journey", icon: <WorkIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/career-paths" },
+    { title: "Career Paths", desc: "Find your career journey", icon: <WorkIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/careerpaths" },
     { title: "Contact", desc: "Reach out to us", icon: <ContactMailIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/contact" },
     { title: "Logout", desc: "Logout", icon: <LoginIcon sx={{ fontSize: 60, color: "#ff9800" }} />, path: "/login" },
     

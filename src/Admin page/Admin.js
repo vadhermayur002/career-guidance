@@ -98,8 +98,26 @@ function Admin() {
               </Button>
             </Paper>
           </Grid>
-         </Grid>
+        
 
+         
+          {/* Manage career paths*/}
+            <Grid item xs={12} md={4}>
+            <Paper sx={{ p: 3, borderRadius: 2, textAlign: "center" }}>
+              <Typography variant="h6">Manage Exam</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Update Career paths details
+              </Typography>
+               <Button onClick={() => navigate("/careerpathsmg")}
+                variant="contained"
+                sx={{ mt: 2, backgroundColor: "#1a237e" }}
+              >
+               career paths
+              </Button>
+            </Paper>
+          </Grid>
+ 
+           </Grid>
 
         {/* Logout */}
         <Box textAlign="center" mt={4}>

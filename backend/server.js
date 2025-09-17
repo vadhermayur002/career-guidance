@@ -214,9 +214,71 @@ app.put("/api/users/:id", async (req, res) => {
   }
 });
 
-/* ==========================
-   ✅ Start Server
-========================== */
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on http://localhost:${PORT}`)
-);
+// -------------------
+// Career Path Schema
+// -------------------
+const careerPathSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  roles: { type: [String], default: [] },
+  skills: { type: [String], default: [] },
+  futureScope: { type: String, default: "" },
+});
+
+const CareerPath = mongoose.model("CareerPath", careerPathSchema);
+
+// -------------------
+// Routes
+// -------------------
+
+// Get all career paths
+app.get("/api/career_paths", async (req, res) => {
+  try {
+    const paths = await CareerPath.find();
+    res.json(paths);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Create a career path
+app.post("/api/career_paths", async (req, res) => {
+  try {
+    const newPath = new CareerPath(req.body);
+    await newPath.save();
+    res.status(201).json(newPath);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Update a career path
+app.put("/api/career_paths/:id", async (req, res) => {
+  try {
+    const updatedPath = await CareerPath.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(updatedPath);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Delete a career path
+app.delete("/api/career_paths/:id", async (req, res) => {
+  try {
+    await CareerPath.findByIdAndDelete(req.params.id);
+    res.json({ message: "Career path deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// -------------------
+// Start Server
+// -------------------
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+
+

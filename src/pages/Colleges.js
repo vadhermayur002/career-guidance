@@ -493,7 +493,7 @@ function Colleges() {
   const [colleges, setColleges] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("All");
 
-  // ✅ Fetch from backend
+  // Fetch from backend
   useEffect(() => {
     const fetchColleges = async () => {
       try {
@@ -507,20 +507,38 @@ function Colleges() {
     fetchColleges();
   }, []);
 
-  // ✅ Unique courses for filter
-  const uniqueCourses = [
-    "All",
-    ...new Set(colleges.flatMap((c) => c.courses || [])),
+  // Hardcoded fallback courses (from your first code)
+  const fallbackCourses = [
+    "B.Tech",
+    "M.Tech",
+    "MBA",
+    "PhD",
+    "B.E",
+    "M.E",
+    "Arts",
+    "Science",
+    "Commerce",
+    "Law",
   ];
 
-  // ✅ Apply filter
+  // Unique courses: backend courses + fallback courses
+  const uniqueCourses = [
+    "All",
+    ...new Set([
+      ...colleges.flatMap((c) => c.courses || []),
+      ...fallbackCourses,
+    ]),
+  ];
+
+  // Filter colleges based on selected course
   const filteredColleges =
     selectedCourse === "All"
       ? colleges
-      : colleges.filter((c) => c.courses.includes(selectedCourse));
+      : colleges.filter((c) => c.courses?.includes(selectedCourse));
 
   return (
     <Box>
+      {/* Hero Section */}
       <Box
         sx={{
           height: "50vh",
@@ -554,7 +572,7 @@ function Colleges() {
       {/* Colleges Section */}
       <Box sx={{ py: 6, backgroundColor: "#121212", minHeight: "100vh" }}>
         <Container>
-          {/* Filter */}
+          {/* Filter Dropdown */}
           <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
             <FormControl
               sx={{
@@ -571,12 +589,8 @@ function Colleges() {
                 onChange={(e) => setSelectedCourse(e.target.value)}
                 sx={{
                   color: "white",
-                  ".MuiOutlinedInput-notchedOutline": {
-                    borderColor: "gray",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "orange",
-                  },
+                  ".MuiOutlinedInput-notchedOutline": { borderColor: "gray" },
+                  "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "orange" },
                   ".MuiSvgIcon-root": { color: "white" },
                 }}
               >
@@ -637,11 +651,7 @@ function Colleges() {
                     <Typography variant="body2" color="gray.400">
                       <b>Courses:</b> {college.courses?.join(", ")}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      color="gray.400"
-                      gutterBottom
-                    >
+                    <Typography variant="body2" color="gray.400" gutterBottom>
                       <b>Fees:</b> {college.fees}
                     </Typography>
 
@@ -655,8 +665,7 @@ function Colleges() {
                         background: "linear-gradient(45deg, #ff9800, #ff5722)",
                         fontWeight: "bold",
                         "&:hover": {
-                          background:
-                            "linear-gradient(45deg,#ff5722,#ff9800)",
+                          background: "linear-gradient(45deg,#ff5722,#ff9800)",
                           boxShadow: "0px 0px 12px rgba(255,152,0,0.7)",
                         },
                       }}
