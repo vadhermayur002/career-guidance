@@ -162,7 +162,7 @@ function Colleges() {
                         image={college.image}
                         alt={college.name}
                         sx={{
-                          maxHeight: "100%",
+                          maxHeight: "80%",
                           maxWidth: "80%",
                           objectFit: "contain",
                         }}

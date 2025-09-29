@@ -159,138 +159,192 @@
 
 // export default Courses;
 
-import React from "react";
-import { Container, Grid, Card, CardContent, Typography, Button, Box } from "@mui/material";
-
-const courses = [
-  {
-    id: 1,
-    title: "Java",
-    category: "Java",
-    website: "https://alison.com/course/java-programming",
-    logo: "https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg",
-  },
-  {
-    id: 2,
-    title: "Python for Everybody",
-    category: "Python",
-    website: "https://www.coursera.org/specializations/python",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
-  },
-  {
-    id: 3,
-    title: "CS50: Introduction to Computer Science",
-    category: "Computer Science",
-    website: "https://cs50.harvard.edu/x/",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/8/8d/CS50_logo.png",
-  },
-  {
-    id: 4,
-    title: "Web Development",
-    category: "HTML, CSS, JavaScript",
-    website: "https://www.theodinproject.com/",
-    logo: "https://cdn-icons-png.flaticon.com/512/919/919828.png",
-  },
-  {
-    id: 5,
-    title: "JavaScript Basics",
-    category: "JavaScript",
-    website: "https://javascript.info/",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-  },
-  {
-    id: 6,
-    title: "Data Science Foundations",
-    category: "Data Science",
-    website: "https://www.datacamp.com/",
-    logo: "https://cdn-icons-png.flaticon.com/512/2103/2103658.png",
-  },
-  {
-    id: 7,
-    title: "AI for Everyone",
-    category: "Artificial Intelligence",
-    website: "https://www.coursera.org/learn/ai-for-everyone",
-    logo: "https://cdn-icons-png.flaticon.com/512/4712/4712103.png",
-  },
-  {
-    id: 8,
-    title: "Machine Learning",
-    category: "Machine Learning",
-    website: "https://www.coursera.org/learn/machine-learning",
-    logo: "https://cdn-icons-png.flaticon.com/512/4149/4149647.png",
-  },
-];
+import React, { useState } from "react";
 
 function Courses() {
+  // Sample courses
+  const courses = [
+    {
+      name: "Java",
+      course: "Java",
+      website: "https://alison.com/course/java-part-1-what-s-new",
+      image: "https://cdn01.alison-static.net/public/html/site/img/header/alison-free-courses.svg",
+    },
+    {
+      name: "Python for Everybody",
+      course: "Python",
+      website: "https://www.coursera.org/specializations/python",
+      image: "https://gss-technology.com/wp-content/uploads/2021/07/04.png",
+    },
+    {
+      name: "CS50: Introduction to Computer Science",
+      course: "Computer Science",
+      website: "https://cs50.harvard.edu/x/",
+      image: "https://repository-images.githubusercontent.com/408218596/c5562f34-43be-4186-b9b3-970924a00529",
+    },
+    {
+      name: "Web Development",
+      course: "HTML, CSS, JavaScript",
+      website: "https://www.freecodecamp.org/learn/",
+      image: "https://thumbs.dreamstime.com/b/web-development-icon-logo-line-art-style-vector-illustration-83644923.jpg",
+    },
+    {
+      name: "JavaScript Basics",
+      course: "JavaScript",
+      website: "https://www.codecademy.com/learn/introduction-to-javascript",
+      image: "https://www.freepnglogos.com/uploads/javascript-png/png-javascript-badge-picture-8.png",
+    },
+    {
+      name: "Data Science Foundations",
+      course: "Data Science",
+      website: "https://www.edx.org/course/data-science-machine-learning",
+      image: "https://www.vlrtraining.in/wp-content/uploads/2020/10/logo-data-science.png",
+    },
+    {
+      name: "AI for Everyone",
+      course: "Artificial Intelligence",
+      website: "https://www.coursera.org/learn/ai-for-everyone",
+      image: "https://static1.squarespace.com/static/612560dfd39ab83a3df8150b/t/613d3dc0927160661892ec7a/1631403456724/AIForEveryone-Latest-Logo+copy.png",
+    },
+    {
+      name: "Machine Learning",
+      course: "Machine Learning",
+      website: "https://www.coursera.org/learn/machine-learning",
+      image: "https://static.vecteezy.com/system/resources/previews/013/899/429/original/machine-learning-icon-artificial-intelligence-smart-machine-logo-template-illustration-free-vector.jpg",
+    },
+    {
+      name: "C++ for Beginners",
+      course: "C++",
+      website: "https://www.learncpp.com/",
+      image: "https://isocpp.org/assets/images/cpp_logo.png",
+    },
+    {
+      name: "Database Design",
+      course: "SQL & Databases",
+      website: "https://www.khanacademy.org/computing/computer-programming/sql",
+      image: "https://cdn.kastatic.org/images/khan-logo-vertical-transparent.png",
+    },
+  ];
+
+  const [selectedCourse, setSelectedCourse] = useState("All");
+
+  // Filter by category
+  const filteredCourse =
+    selectedCourse === "All"
+      ? courses
+      : courses.filter((c) =>
+          c.course.toLowerCase().includes(selectedCourse.toLowerCase())
+        );
+
   return (
-    <Container maxWidth="lg" sx={{ mt: 5 }}>
-      <Grid container spacing={4} justifyContent="center">
-        {courses.map((course) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
-            <Card
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-                textAlign: "center",
-                p: 2,
-                borderRadius: 3,
-                backgroundColor: "#1c1c1c",
-                color: "white",
-                boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #0f2027, #203a43, #2c5364)", // ✅ Dark background
+        padding: "30px",
+        color: "#fff",
+      }}
+    >
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>📘 Top Courses</h1>
+
+      {/* Dropdown */}
+      <div style={{ marginBottom: "20px", textAlign: "center" }}>
+        <label style={{ marginRight: "10px", fontWeight: "bold" }}>
+          Filter by Course:
+        </label>
+        <select
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+          style={{
+            padding: "10px",
+            borderRadius: "8px",
+            border: "none",
+            fontSize: "16px",
+          }}
+        >
+          <option value="All">All</option>
+          <option value="Java">Java</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="SQL & Databases">SQL & Databases</option>
+          <option value="Machine Learning">Machine Learning</option>
+          <option value="Artificial Intelligence">Artificial Intelligence</option>
+          <option value="Python">Python</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+        </select>
+      </div>
+
+      {/* Cards */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {filteredCourse.map((course, index) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: "#1e1e1e", // ✅ Dark card
+              borderRadius: "15px",
+              padding: "20px",
+              textAlign: "center",
+              boxShadow: "0px 6px 15px rgba(0,0,0,0.6)",
+              height: "320px", // ✅ Fixed card height
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              transition: "0.3s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "translateY(-8px) scale(1.02)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = "translateY(0) scale(1)")
+            }
+          >
+            <img
+              src={course.image}
+              alt={course.name}
+              style={{
+                width: "80px",
+                height: "80px",
+                margin: "0 auto 10px",
+                objectFit: "contain",
+              }}
+            />
+            <h2 style={{ color: "#ff9800", fontSize: "18px" }}>{course.name}</h2>
+            <p style={{ color: "rgba(255,255,255,0.7)" }}>
+              <strong>Course:</strong> {course.course}
+            </p>
+            <a
+              href={course.website}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "inline-block",
+                marginTop: "10px",
+                padding: "10px 15px",
+                background: "linear-gradient(45deg, #ff9800, #ff5722)",
+                color: "#fff",
+                borderRadius: "8px",
+                textDecoration: "none",
+                fontWeight: "bold",
               }}
             >
-              {/* Logo */}
-              <Box
-                component="img"
-                src={course.logo}
-                alt={course.title}
-                sx={{ height: 80, width: "auto", objectFit: "contain", mb: 2 }}
-              />
-
-              {/* Title */}
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {course.title}
-                </Typography>
-                <Box
-                  sx={{
-                    display: "inline-block",
-                    background: "orange",
-                    px: 2,
-                    py: 0.5,
-                    borderRadius: "20px",
-                    fontSize: "0.85rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {course.category}
-                </Box>
-              </CardContent>
-
-              {/* Button */}
-              <Button
-                href={course.website}
-                target="_blank"
-                variant="contained"
-                sx={{
-                  mt: "auto",
-                  background: "linear-gradient(to right, #ff8008, #ff4500)",
-                  fontWeight: "bold",
-                  borderRadius: "20px",
-                  "&:hover": { background: "linear-gradient(to right, #ff4500, #ff8008)" },
-                }}
-              >
-                VISIT WEBSITE
-              </Button>
-            </Card>
-          </Grid>
+              Visit Website
+            </a>
+          </div>
         ))}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   );
 }
 
 export default Courses;
+
+
+
