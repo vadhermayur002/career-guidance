@@ -1,3 +1,4 @@
+// src/pages/Tools.js
 import React, { useState } from "react";
 import {
   Box,
@@ -6,8 +7,43 @@ import {
   Paper,
   TextField,
   Button,
+  Chip,
 } from "@mui/material";
 import { Phone, Email, LocationOn } from "@mui/icons-material";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
+const resumeTips = [
+  "Keep it concise: ideally 1 page for entry-level positions.",
+  "Highlight achievements, not just responsibilities.",
+  "Tailor resume to the job description.",
+  "Use professional fonts and consistent formatting.",
+  "Check for spelling and grammar errors.",
+];
+
+const templates = {
+  style1: {
+    headerBg: "#2c3e50",
+    headerColor: "#fff",
+    sectionBg: "#fff",
+    sectionColor: "#000",
+    skillColor: "#ff9800",
+  },
+  style2: {
+    headerBg: "#ff9800",
+    headerColor: "#121212",
+    sectionBg: "#1e1e1e",
+    sectionColor: "#fff",
+    skillColor: "#4caf50",
+  },
+  style3: {
+    headerBg: "#4caf50",
+    headerColor: "#fff",
+    sectionBg: "#e8f5e9",
+    sectionColor: "#000",
+    skillColor: "#2196f3",
+  },
+};
 
 const Tools = () => {
   const [resumeData, setResumeData] = useState({
@@ -18,7 +54,6 @@ const Tools = () => {
     email: "",
     address: "",
     skills: [],
-    languages: [],
     education: [],
     projects: [],
   });
@@ -26,13 +61,12 @@ const Tools = () => {
   const [skillInput, setSkillInput] = useState("");
   const [eduInput, setEduInput] = useState({ start: "", end: "", school: "", standard: "" });
   const [projInput, setProjInput] = useState({ start: "", end: "", title: "", description: "" });
+  const [template, setTemplate] = useState("style1");
 
-  // Handle general change
   const handleChange = (field, value) => {
     setResumeData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Add skill
   const addSkill = () => {
     if (skillInput.trim() !== "") {
       setResumeData((prev) => ({
@@ -43,7 +77,6 @@ const Tools = () => {
     }
   };
 
-  // Add education
   const addEducation = () => {
     if (eduInput.school && eduInput.standard) {
       setResumeData((prev) => ({
@@ -54,7 +87,6 @@ const Tools = () => {
     }
   };
 
-  // Add project
   const addProject = () => {
     if (projInput.title && projInput.description) {
       setResumeData((prev) => ({
@@ -65,8 +97,27 @@ const Tools = () => {
     }
   };
 
+  const downloadPDF = () => {
+    const input = document.getElementById("resume-preview");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("resume.pdf");
+    });
+  };
+
+  const style = templates[template];
+
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, bgcolor: "#121212", minHeight: "100vh" }}>
+      <Typography variant="h4" color="orange" align="center" gutterBottom>
+        Professional Resume Builder
+      </Typography>
+
       <Grid container spacing={4}>
         {/* LEFT FORM */}
         <Grid item xs={12} md={4}>
@@ -98,7 +149,6 @@ const Tools = () => {
               value={resumeData.about}
               onChange={(e) => handleChange("about", e.target.value)}
             />
-
             <TextField
               fullWidth
               label="Phone"
@@ -131,9 +181,14 @@ const Tools = () => {
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
               />
-              <Button variant="outlined" size="small" onClick={addSkill}>
-                Add
+              <Button variant="outlined" size="small" onClick={addSkill} sx={{ mt: 1 }}>
+                Add Skill
               </Button>
+              <Box sx={{ mt: 1 }}>
+                {resumeData.skills.map((s, i) => (
+                  <Chip key={i} label={s} sx={{ mr: 0.5, mb: 0.5, bgcolor: style.skillColor }} />
+                ))}
+              </Box>
             </Box>
 
             {/* Education */}
@@ -162,13 +217,13 @@ const Tools = () => {
               />
               <TextField
                 fullWidth
-                label="Standard / Degree"
+                label="Degree / Standard"
                 margin="dense"
                 value={eduInput.standard}
                 onChange={(e) => setEduInput({ ...eduInput, standard: e.target.value })}
               />
-              <Button variant="outlined" size="small" onClick={addEducation}>
-                Add
+              <Button variant="outlined" size="small" onClick={addEducation} sx={{ mt: 1 }}>
+                Add Education
               </Button>
             </Box>
 
@@ -203,34 +258,57 @@ const Tools = () => {
                 multiline
                 minRows={2}
                 value={projInput.description}
-                onChange={(e) =>
-                  setProjInput({ ...projInput, description: e.target.value })
-                }
+                onChange={(e) => setProjInput({ ...projInput, description: e.target.value })}
               />
-              <Button variant="outlined" size="small" onClick={addProject}>
-                Add
+              <Button variant="outlined" size="small" onClick={addProject} sx={{ mt: 1 }}>
+                Add Project
               </Button>
             </Box>
+
+            {/* Resume Guidance */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6">Resume Tips</Typography>
+              <ul>
+                {resumeTips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+            </Box>
+
+            {/* Template Selector */}
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6">Select Template</Typography>
+              {Object.keys(templates).map((t) => (
+                <Button
+                  key={t}
+                  onClick={() => setTemplate(t)}
+                  variant={template === t ? "contained" : "outlined"}
+                  sx={{ mr: 1, mt: 1 }}
+                >
+                  {t.toUpperCase()}
+                </Button>
+              ))}
+            </Box>
+
+            <Button variant="contained" onClick={downloadPDF} sx={{ mt: 2 }}>
+              Download PDF
+            </Button>
           </Paper>
         </Grid>
 
         {/* RIGHT PREVIEW */}
         <Grid item xs={12} md={8}>
-          <Paper elevation={3}>
+          <Paper id="resume-preview" sx={{ p: 0 }}>
             {/* Header */}
-            <Box
-              sx={{ bgcolor: "#2c3e50", color: "#fff", p: 3, textAlign: "center" }}
-            >
+            <Box sx={{ bgcolor: style.headerBg, color: style.headerColor, p: 3, textAlign: "center" }}>
               <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                 {resumeData.name || "Your Name"}
               </Typography>
-              <Typography variant="subtitle1">
-                {resumeData.title || "Your Title"}
-              </Typography>
+              <Typography variant="subtitle1">{resumeData.title || "Your Title"}</Typography>
             </Box>
 
-            <Box sx={{ p: 3 }}>
-              {/* About Me */}
+            <Box sx={{ p: 3, bgcolor: style.sectionBg, color: style.sectionColor }}>
+              {/* About */}
               {resumeData.about && (
                 <>
                   <Typography variant="h6">About Me</Typography>
@@ -284,11 +362,15 @@ const Tools = () => {
               {resumeData.skills.length > 0 && (
                 <>
                   <Typography variant="h6">Skills</Typography>
-                  <ul>
+                  <Box sx={{ mb: 2 }}>
                     {resumeData.skills.map((s, i) => (
-                      <li key={i}>{s}</li>
+                      <Chip
+                        key={i}
+                        label={s}
+                        sx={{ mr: 0.5, mb: 0.5, bgcolor: style.skillColor }}
+                      />
                     ))}
-                  </ul>
+                  </Box>
                 </>
               )}
 

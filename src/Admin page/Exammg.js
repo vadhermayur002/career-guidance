@@ -217,7 +217,6 @@
 // }
 
 // export default Exammg;
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, TextField, Button, Typography, Paper, Grid, Box } from "@mui/material";
@@ -225,64 +224,106 @@ import { Container, TextField, Button, Typography, Paper, Grid, Box } from "@mui
 function Exammg() {
   const [exams, setExams] = useState([]);
   const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+  const [conductedBy, setConductedBy] = useState("");
   const [eligibility, setEligibility] = useState("");
+  const [ageLimit, setAgeLimit] = useState("");
+  const [salary, setSalary] = useState("");
+  const [stages, setStages] = useState("");
+  const [freeCourse, setFreeCourse] = useState("");
   const [editId, setEditId] = useState(null);
 
+  // Fetch exams from backend
   const fetchExams = async () => {
-    const res = await axios.get("http://localhost:5000/api/exams");
-    setExams(res.data);
+    try {
+      const res = await axios.get("http://localhost:5000/api/exams");
+      setExams(res.data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
     fetchExams();
   }, []);
 
+  // Add or update exam
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newExam = { name, date, eligibility };
-    if (editId) {
-      await axios.put(`http://localhost:5000/api/exams/${editId}`, newExam);
-    } else {
-      await axios.post("http://localhost:5000/api/exams", newExam);
+    const newExam = { name, conductedBy, eligibility, ageLimit, salary, stages, freeCourse };
+
+    try {
+      if (editId) {
+        await axios.put(`http://localhost:5000/api/exams/${editId}`, newExam);
+      } else {
+        await axios.post("http://localhost:5000/api/exams", newExam);
+      }
+      fetchExams();
+      // Reset form
+      setEditId(null);
+      setName("");
+      setConductedBy("");
+      setEligibility("");
+      setAgeLimit("");
+      setSalary("");
+      setStages("");
+      setFreeCourse("");
+    } catch (err) {
+      console.error(err);
     }
-    fetchExams();
-    setEditId(null);
-    setName("");
-    setDate("");
-    setEligibility("");
   };
 
+  // Delete exam
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/exams/${id}`);
-    fetchExams();
+    try {
+      await axios.delete(`http://localhost:5000/api/exams/${id}`);
+      fetchExams();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+  // Edit exam
   const handleEdit = (exam) => {
     setName(exam.name);
-    setDate(exam.date);
+    setConductedBy(exam.conductedBy);
     setEligibility(exam.eligibility);
+    setAgeLimit(exam.ageLimit);
+    setSalary(exam.salary);
+    setStages(exam.stages);
+    setFreeCourse(exam.freeCourse);
     setEditId(exam._id);
   };
 
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>📝 Manage Exams</Typography>
+
       <Paper sx={{ p: 3, mb: 4 }}>
         <form onSubmit={handleSubmit}>
-          <TextField fullWidth label="Exam Name" value={name} onChange={(e) => setName(e.target.value)} sx={{ mt: 2 }} />
-          <TextField fullWidth label="Date" value={date} onChange={(e) => setDate(e.target.value)} sx={{ mt: 2 }} />
-          <TextField fullWidth label="Eligibility" value={eligibility} onChange={(e) => setEligibility(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Exam Name" value={name} onChange={e => setName(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Conducted By" value={conductedBy} onChange={e => setConductedBy(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Eligibility" value={eligibility} onChange={e => setEligibility(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Age Limit" value={ageLimit} onChange={e => setAgeLimit(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Salary" value={salary} onChange={e => setSalary(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Exam Stages" value={stages} onChange={e => setStages(e.target.value)} sx={{ mt: 2 }} />
+          <TextField fullWidth label="Free Course Link" value={freeCourse} onChange={e => setFreeCourse(e.target.value)} sx={{ mt: 2 }} />
           <Button type="submit" variant="contained" sx={{ mt: 2 }}>{editId ? "Update" : "Add"}</Button>
         </form>
       </Paper>
+
       <Grid container spacing={3}>
         {exams.map((e) => (
           <Grid item xs={12} md={6} lg={4} key={e._id}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="h6">{e.name}</Typography>
-              <Typography>{e.date}</Typography>
-              <Typography>{e.eligibility}</Typography>
+              <Typography><strong>Conducted By:</strong> {e.conductedBy}</Typography>
+              <Typography><strong>Eligibility:</strong> {e.eligibility}</Typography>
+              <Typography><strong>Age Limit:</strong> {e.ageLimit}</Typography>
+              <Typography><strong>Salary:</strong> {e.salary}</Typography>
+              <Typography><strong>Stages:</strong> {e.stages}</Typography>
+              <Typography>
+                <a href={e.freeCourse} target="_blank" rel="noopener noreferrer">📘 Free Course</a>
+              </Typography>
               <Box mt={2}>
                 <Button variant="outlined" size="small" onClick={() => handleEdit(e)} sx={{ mr: 1 }}>Edit</Button>
                 <Button variant="outlined" color="error" size="small" onClick={() => handleDelete(e._id)}>Delete</Button>
@@ -296,4 +337,3 @@ function Exammg() {
 }
 
 export default Exammg;
-

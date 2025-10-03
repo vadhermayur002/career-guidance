@@ -273,6 +273,225 @@ app.delete("/api/career_paths/:id", async (req, res) => {
   }
 });
 
+
+/**/
+
+// --- TEST SCHEMA ---
+const testSchema = new mongoose.Schema({
+  name: String
+});
+const Test = mongoose.model("Test", testSchema);
+
+// --- QUESTIONS SCHEMA ---
+const questionSchema = new mongoose.Schema({
+  testId: { type: mongoose.Schema.Types.ObjectId, ref: "Test" },
+  question: String,
+  options: [String],
+  answer: String,
+});
+const Question = mongoose.model("Question", questionSchema);
+
+// --- ROUTES ---
+
+// ✅ Get all tests
+app.get("/api/tests", async (req, res) => {
+  try {
+    const tests = await Test.find();
+    res.json(tests);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// ✅ Add new test
+app.post("/api/tests", async (req, res) => {
+  try {
+    const newTest = new Test(req.body);
+    await newTest.save();
+    res.status(201).json(newTest);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// ✅ Delete test
+app.delete("/api/tests/:id", async (req, res) => {
+  try {
+    await Test.findByIdAndDelete(req.params.id);
+    await Question.deleteMany({ testId: req.params.id });
+    res.json({ msg: "Test deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+
+
+
+/* ==========================
+   🔹 Test Routes
+========================== */
+// Get all tests
+app.get("/api/tests", async (req, res) => {
+  try {
+    const tests = await Test.find();
+    res.json(tests);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Add new test
+app.post("/api/tests", async (req, res) => {
+  try {
+    const newTest = new Test(req.body);
+    await newTest.save();
+    res.status(201).json(newTest);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Delete test
+app.delete("/api/tests/:id", async (req, res) => {
+  try {
+    await Test.findByIdAndDelete(req.params.id);
+    await Question.deleteMany({ testId: req.params.id });
+    res.json({ msg: "Test deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Update test
+app.put("/api/tests/:id", async (req, res) => {
+  try {
+    const updatedTest = await Test.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedTest);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+/* ==========================
+   🔹 Question Routes
+========================== */
+
+// Get all questions for a test
+app.get("/api/tests/:testId/questions", async (req, res) => {
+  try {
+    const questions = await Question.find({ testId: req.params.testId });
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Add a new question to a test
+app.post("/api/tests/:testId/questions", async (req, res) => {
+  try {
+    const { question, options, answer } = req.body;
+    const newQuestion = new Question({
+      testId: req.params.testId,
+      question,
+      options,
+      answer,
+    });
+    await newQuestion.save();
+    res.status(201).json(newQuestion);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Update a question
+app.put("/api/questions/:id", async (req, res) => {
+  try {
+    const updatedQuestion = await Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedQuestion);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// Delete a question
+app.delete("/api/questions/:id", async (req, res) => {
+  try {
+    await Question.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Question deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+/* ==========================
+   🔹 Root
+========================== */
+app.get("/", (req, res) => {
+  res.send("🚀 Career Guidance API is running!");
+});
+
+/* ==========================
+   🔹 Course Schema & Model
+========================== */
+const courseSchema = new mongoose.Schema({
+  title: { type: String, required: true }, // Course title
+  course: { type: String },                // Category/type
+  duration: { type: String },              // Optional: Duration
+  website: { type: String },               // Website link
+  image: { type: String },                 // Image URL
+});
+
+const Course = mongoose.model("Course", courseSchema);
+
+
+/* ==========================
+   🔹 Courses Routes
+========================== */
+
+// ✅ Get all courses
+app.get("/api/courses", async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// ✅ Add a new course
+app.post("/api/courses", async (req, res) => {
+  try {
+    const newCourse = new Course(req.body);
+    await newCourse.save();
+    res.status(201).json(newCourse);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// ✅ Update a course
+app.put("/api/courses/:id", async (req, res) => {
+  try {
+    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedCourse);
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+// ✅ Delete a course
+app.delete("/api/courses/:id", async (req, res) => {
+  try {
+    await Course.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Course deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", err });
+  }
+});
+
+
+
 // -------------------
 // Start Server
 // -------------------

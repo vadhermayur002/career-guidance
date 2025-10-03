@@ -129,6 +129,7 @@ import Coursesmg from "./Admin page/Coursesmg";
 import Exammg from "./Admin page/Exammg";
 import Usersmg from "./Admin page/Usersmg";
 import Careerpathsmg from "./Admin page/Careerpathsmg";
+import Testmg from "./Admin page/Testmg";
 
 // Test Pages
 import UPSCTest from "./Test/UPSCTest";
@@ -334,6 +335,16 @@ function App() {
             </Layout>
           }
         />
+          
+        <Route
+          path="/testmg"
+          element={
+            <Layout>
+              <PrivateRoute element={<Testmg />} allowedRole="admin" />
+            </Layout>
+          }
+        />
+
 
         {/* Catch all - redirect unknown routes to login */}
         <Route path="*" element={<Navigate to="/login" />} />
